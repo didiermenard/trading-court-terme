@@ -1,95 +1,560 @@
 {
-  "AAPL": "Apple",
-  "MSFT": "Microsoft",
-  "GOOGL": "Alphabet",
-  "AMZN": "Amazon",
-  "TSLA": "Tesla",
-  "META": "Meta",
-  "JNJ": "Johnson & Johnson",
-  "NVDA": "NVIDIA",
-  "JPM": "JPMorgan",
-  "V": "Visa",
-  "7203.T": "Toyota",
-  "6758.T": "Sony",
-  "9984.T": "SoftBank",
-  "9432.T": "NTT",
-  "8035.T": "Tokyo Electron",
-  "6954.T": "Fanuc",
-  "7267.T": "Honda",
-  "8316.T": "Sumitomo Mitsui",
-  "4502.T": "Takeda",
-  "7751.T": "Canon",
-  "SAP.DE": "SAP",
-  "SIE.DE": "Siemens",
-  "BAS.DE": "BASF",
-  "BMW.DE": "BMW",
-  "HSBA.L": "HSBC",
-  "AZN.L": "AstraZeneca",
-  "ULVR.L": "Unilever",
-  "NESN.SW": "Nestlé",
-  "NOVN.SW": "Novartis",
-  "ROG.SW": "Roche",
-  "0700.HK": "Tencent",
-  "9988.HK": "Alibaba",
-  "3690.HK": "Meituan",
-  "2318.HK": "Ping An",
-  "2388.HK": "BOC Hong Kong",
-  "0005.HK": "HSBC Holdings",
-  "0001.HK": "CK Hutchison",
-  "1038.HK": "CKI Holdings",
-  "0941.HK": "China Mobile",
-  "0939.HK": "CCB",
-  "D05.SI": "DBS Group",
-  "U11.SI": "UOB",
-  "Z74.SI": "SingTel",
-  "C07.SI": "Jardine Cycle",
-  "Y92.SI": "ComfortDelGro",
-  "XOM": "Exxon Mobil",
-  "CVX": "Chevron",
-  "PLD": "Prologis",
-  "DUK": "Duke Energy",
-  "BHP.AX": "BHP Group",
-  "RIO.L": "Rio Tinto",
-  "ENGI.PA": "Engie",
-  "NG.L": "National Grid",
-  "AMT": "American Tower",
-  "CCI": "Crown Castle",
-  "AI.PA": "Air Liquide",
-  "AIR.PA": "Airbus",
-  "ALO.PA": "Alstom",
-  "APAM.AS": "Aperam",
-  "BNP.PA": "BNP Paribas",
-  "CAP.PA": "Capgemini",
-  "CS.PA": "AXA",
-  "CA.PA": "Crédit Agricole",
-  "BN.PA": "Danone",
-  "DSY.PA": "Dassault Systèmes",
-  "EL.PA": "EssilorLuxottica",
-  "EN.PA": "Bouygues",
-  "ERF.PA": "Eurofins Scientific",
-  "FR.PA": "Valeo",
-  "GLE.PA": "Société Générale",
-  "HO.PA": "Thales",
-  "KER.PA": "Kering",
-  "LR.PA": "Legrand",
-  "MC.PA": "LVMH",
-  "ML.PA": "Michelin",
-  "MT.AS": "ArcelorMittal",
-  "OR.PA": "L'Oréal",
-  "ORA.PA": "Orange",
-  "PUB.PA": "Publicis",
-  "RMS.PA": "Hermès",
-  "RI.PA": "Pernod Ricard",
-  "RNO.PA": "Renault",
-  "SAF.PA": "Safran",
-  "SAN.PA": "Sanofi",
-  "SGO.PA": "Saint-Gobain",
-  "STLA.PA": "Stellantis",
-  "STM.PA": "STMicroelectronics",
-  "SU.PA": "Schneider Electric",
-  "SW.PA": "Sodexo",
-  "TTE.PA": "TotalEnergies",
-  "URW.PA": "Unibail-Rodamco-Westfield",
-  "VIE.PA": "Veolia",
-  "VIV.PA": "Vivendi"
+  "AAPL": {
+    "entreprise": "Apple",
+    "pays": "USA",
+    "indice": "S&P 500",
+    "secteur": "Technologie"
+  },
+  "MSFT": {
+    "entreprise": "Microsoft",
+    "pays": "USA",
+    "indice": "S&P 500",
+    "secteur": "Technologie"
+  },
+  "GOOGL": {
+    "entreprise": "Alphabet",
+    "pays": "USA",
+    "indice": "S&P 500",
+    "secteur": "Technologie"
+  },
+  "AMZN": {
+    "entreprise": "Amazon",
+    "pays": "USA",
+    "indice": "S&P 500",
+    "secteur": "Consommation discrétionnaire"
+  },
+  "TSLA": {
+    "entreprise": "Tesla",
+    "pays": "USA",
+    "indice": "S&P 500",
+    "secteur": "Automobile"
+  },
+  "META": {
+    "entreprise": "Meta",
+    "pays": "USA",
+    "indice": "S&P 500",
+    "secteur": "Technologie"
+  },
+  "JNJ": {
+    "entreprise": "Johnson & Johnson",
+    "pays": "USA",
+    "indice": "S&P 500",
+    "secteur": "Santé"
+  },
+  "NVDA": {
+    "entreprise": "NVIDIA",
+    "pays": "USA",
+    "indice": "S&P 500",
+    "secteur": "Technologie"
+  },
+  "JPM": {
+    "entreprise": "JPMorgan",
+    "pays": "USA",
+    "indice": "S&P 500",
+    "secteur": "Finance"
+  },
+  "V": {
+    "entreprise": "Visa",
+    "pays": "USA",
+    "indice": "S&P 500",
+    "secteur": "Finance"
+  },
+  "7203.T": {
+    "entreprise": "Toyota",
+    "pays": "Japan",
+    "indice": "Nikkei 225",
+    "secteur": "Automobile"
+  },
+  "6758.T": {
+    "entreprise": "Sony",
+    "pays": "Japan",
+    "indice": "Nikkei 225",
+    "secteur": "Technologie"
+  },
+  "9984.T": {
+    "entreprise": "SoftBank",
+    "pays": "Japan",
+    "indice": "Nikkei 225",
+    "secteur": "Technologie"
+  },
+  "9432.T": {
+    "entreprise": "NTT",
+    "pays": "Japan",
+    "indice": "Nikkei 225",
+    "secteur": "Télécoms"
+  },
+  "8035.T": {
+    "entreprise": "Tokyo Electron",
+    "pays": "Japan",
+    "indice": "Nikkei 225",
+    "secteur": "Technologie"
+  },
+  "6954.T": {
+    "entreprise": "Fanuc",
+    "pays": "Japan",
+    "indice": "Nikkei 225",
+    "secteur": "Robotique"
+  },
+  "7267.T": {
+    "entreprise": "Honda",
+    "pays": "Japan",
+    "indice": "Nikkei 225",
+    "secteur": "Automobile"
+  },
+  "8316.T": {
+    "entreprise": "Sumitomo Mitsui",
+    "pays": "Japan",
+    "indice": "Nikkei 225",
+    "secteur": "Finance"
+  },
+  "4502.T": {
+    "entreprise": "Takeda",
+    "pays": "Japan",
+    "indice": "Nikkei 225",
+    "secteur": "Santé"
+  },
+  "7751.T": {
+    "entreprise": "Canon",
+    "pays": "Japan",
+    "indice": "Nikkei 225",
+    "secteur": "Technologie"
+  },
+  "SAP.DE": {
+    "entreprise": "SAP",
+    "pays": "Germany",
+    "indice": "DAX",
+    "secteur": "Technologie"
+  },
+  "SIE.DE": {
+    "entreprise": "Siemens",
+    "pays": "Germany",
+    "indice": "DAX",
+    "secteur": "Industrie"
+  },
+  "BAS.DE": {
+    "entreprise": "BASF",
+    "pays": "Germany",
+    "indice": "DAX",
+    "secteur": "Chimie"
+  },
+  "BMW.DE": {
+    "entreprise": "BMW",
+    "pays": "Germany",
+    "indice": "DAX",
+    "secteur": "Automobile"
+  },
+  "HSBA.L": {
+    "entreprise": "HSBC",
+    "pays": "UK",
+    "indice": "FTSE 100",
+    "secteur": "Finance"
+  },
+  "AZN.L": {
+    "entreprise": "AstraZeneca",
+    "pays": "UK",
+    "indice": "FTSE 100",
+    "secteur": "Santé"
+  },
+  "ULVR.L": {
+    "entreprise": "Unilever",
+    "pays": "UK",
+    "indice": "FTSE 100",
+    "secteur": "Biens de consommation"
+  },
+  "NESN.SW": {
+    "entreprise": "Nestlé",
+    "pays": "Switzerland",
+    "indice": "SMI",
+    "secteur": "Alimentation"
+  },
+  "NOVN.SW": {
+    "entreprise": "Novartis",
+    "pays": "Switzerland",
+    "indice": "SMI",
+    "secteur": "Santé"
+  },
+  "ROG.SW": {
+    "entreprise": "Roche",
+    "pays": "Switzerland",
+    "indice": "SMI",
+    "secteur": "Santé"
+  },
+  "0700.HK": {
+    "entreprise": "Tencent",
+    "pays": "Hong Kong",
+    "indice": "Hang Seng",
+    "secteur": "Technologie"
+  },
+  "9988.HK": {
+    "entreprise": "Alibaba",
+    "pays": "Hong Kong",
+    "indice": "Hang Seng",
+    "secteur": "E-commerce"
+  },
+  "3690.HK": {
+    "entreprise": "Meituan",
+    "pays": "Hong Kong",
+    "indice": "Hang Seng",
+    "secteur": "E-commerce"
+  },
+  "2318.HK": {
+    "entreprise": "Ping An",
+    "pays": "Hong Kong",
+    "indice": "Hang Seng",
+    "secteur": "Finance"
+  },
+  "2388.HK": {
+    "entreprise": "BOC Hong Kong",
+    "pays": "Hong Kong",
+    "indice": "Hang Seng",
+    "secteur": "Finance"
+  },
+  "0005.HK": {
+    "entreprise": "HSBC Holdings",
+    "pays": "Hong Kong",
+    "indice": "Hang Seng",
+    "secteur": "Finance"
+  },
+  "0001.HK": {
+    "entreprise": "CK Hutchison",
+    "pays": "Hong Kong",
+    "indice": "Hang Seng",
+    "secteur": "Industrie"
+  },
+  "1038.HK": {
+    "entreprise": "CKI Holdings",
+    "pays": "Hong Kong",
+    "indice": "Hang Seng",
+    "secteur": "Infrastructure"
+  },
+  "0941.HK": {
+    "entreprise": "China Mobile",
+    "pays": "Hong Kong",
+    "indice": "Hang Seng",
+    "secteur": "Télécoms"
+  },
+  "0939.HK": {
+    "entreprise": "CCB",
+    "pays": "Hong Kong",
+    "indice": "Hang Seng",
+    "secteur": "Finance"
+  },
+  "D05.SI": {
+    "entreprise": "DBS Group",
+    "pays": "Singapore",
+    "indice": "STI",
+    "secteur": "Finance"
+  },
+  "U11.SI": {
+    "entreprise": "UOB",
+    "pays": "Singapore",
+    "indice": "STI",
+    "secteur": "Finance"
+  },
+  "Z74.SI": {
+    "entreprise": "SingTel",
+    "pays": "Singapore",
+    "indice": "STI",
+    "secteur": "Télécoms"
+  },
+  "C07.SI": {
+    "entreprise": "Jardine Cycle",
+    "pays": "Singapore",
+    "indice": "STI",
+    "secteur": "Industrie"
+  },
+  "Y92.SI": {
+    "entreprise": "ComfortDelGro",
+    "pays": "Singapore",
+    "indice": "STI",
+    "secteur": "Transport"
+  },
+  "XOM": {
+    "entreprise": "Exxon Mobil",
+    "pays": "USA",
+    "indice": "S&P 500",
+    "secteur": "Énergie"
+  },
+  "CVX": {
+    "entreprise": "Chevron",
+    "pays": "USA",
+    "indice": "S&P 500",
+    "secteur": "Énergie"
+  },
+  "PLD": {
+    "entreprise": "Prologis",
+    "pays": "USA",
+    "indice": "S&P 500",
+    "secteur": "Immobilier"
+  },
+  "DUK": {
+    "entreprise": "Duke Energy",
+    "pays": "USA",
+    "indice": "S&P 500",
+    "secteur": "Services aux collectivités"
+  },
+  "BHP.AX": {
+    "entreprise": "BHP Group",
+    "pays": "Australia",
+    "indice": "ASX 200",
+    "secteur": "Matériaux de base"
+  },
+  "RIO.L": {
+    "entreprise": "Rio Tinto",
+    "pays": "UK",
+    "indice": "FTSE 100",
+    "secteur": "Matériaux de base"
+  },
+  "ENGI.PA": {
+    "entreprise": "Engie",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Énergie"
+  },
+  "NG.L": {
+    "entreprise": "National Grid",
+    "pays": "UK",
+    "indice": "FTSE 100",
+    "secteur": "Services aux collectivités"
+  },
+  "AMT": {
+    "entreprise": "American Tower",
+    "pays": "USA",
+    "indice": "S&P 500",
+    "secteur": "Immobilier"
+  },
+  "CCI": {
+    "entreprise": "Crown Castle",
+    "pays": "USA",
+    "indice": "S&P 500",
+    "secteur": "Immobilier"
+  },
+  "AI.PA": {
+    "entreprise": "Air Liquide",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Chimie industrielle"
+  },
+  "AIR.PA": {
+    "entreprise": "Airbus",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Aéronautique"
+  },
+  "ALO.PA": {
+    "entreprise": "Alstom",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Transport ferroviaire"
+  },
+  "APAM.AS": {
+    "entreprise": "Aperam",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Métallurgie"
+  },
+  "BNP.PA": {
+    "entreprise": "BNP Paribas",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Banque"
+  },
+  "CAP.PA": {
+    "entreprise": "Capgemini",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Services numériques"
+  },
+  "CS.PA": {
+    "entreprise": "AXA",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Assurance"
+  },
+  "CA.PA": {
+    "entreprise": "Crédit Agricole",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Banque"
+  },
+  "BN.PA": {
+    "entreprise": "Danone",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Agroalimentaire"
+  },
+  "DSY.PA": {
+    "entreprise": "Dassault Systèmes",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Logiciels"
+  },
+  "EL.PA": {
+    "entreprise": "EssilorLuxottica",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Santé / Optique"
+  },
+  "EN.PA": {
+    "entreprise": "Bouygues",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "BTP / Télécoms"
+  },
+  "ERF.PA": {
+    "entreprise": "Eurofins Scientific",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Biotechnologie"
+  },
+  "FR.PA": {
+    "entreprise": "Valeo",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Équipement automobile"
+  },
+  "GLE.PA": {
+    "entreprise": "Société Générale",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Banque"
+  },
+  "HO.PA": {
+    "entreprise": "Thales",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Défense / Électronique"
+  },
+  "KER.PA": {
+    "entreprise": "Kering",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Luxe"
+  },
+  "LR.PA": {
+    "entreprise": "Legrand",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Équipements électriques"
+  },
+  "MC.PA": {
+    "entreprise": "LVMH",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Luxe"
+  },
+  "ML.PA": {
+    "entreprise": "Michelin",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Pneumatiques"
+  },
+  "MT.AS": {
+    "entreprise": "ArcelorMittal",
+    "pays": "Luxembourg",
+    "indice": "CAC 40",
+    "secteur": "Sidérurgie"
+  },
+  "OR.PA": {
+    "entreprise": "L'Oréal",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Cosmétiques"
+  },
+  "ORA.PA": {
+    "entreprise": "Orange",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Télécoms"
+  },
+  "PUB.PA": {
+    "entreprise": "Publicis",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Communication"
+  },
+  "RMS.PA": {
+    "entreprise": "Hermès",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Luxe"
+  },
+  "RI.PA": {
+    "entreprise": "Pernod Ricard",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Spiritueux"
+  },
+  "RNO.PA": {
+    "entreprise": "Renault",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Automobile"
+  },
+  "SAF.PA": {
+    "entreprise": "Safran",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Aéronautique"
+  },
+  "SAN.PA": {
+    "entreprise": "Sanofi",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Pharmaceutique"
+  },
+  "SGO.PA": {
+    "entreprise": "Saint-Gobain",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Matériaux de construction"
+  },
+  "STLA.PA": {
+    "entreprise": "Stellantis",
+    "pays": "Pays-Bas",
+    "indice": "CAC 40",
+    "secteur": "Automobile"
+  },
+  "STM.PA": {
+    "entreprise": "STMicroelectronics",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Semi-conducteurs"
+  },
+  "SU.PA": {
+    "entreprise": "Schneider Electric",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Équipements électriques"
+  },
+  "SW.PA": {
+    "entreprise": "Sodexo",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Services"
+  },
+  "TTE.PA": {
+    "entreprise": "TotalEnergies",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Énergie"
+  },
+  "URW.PA": {
+    "entreprise": "Unibail-Rodamco-Westfield",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Immobilier commercial"
+  },
+  "VIE.PA": {
+    "entreprise": "Veolia",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Gestion de l'eau et déchets"
+  },
+  "VIV.PA": {
+    "entreprise": "Vivendi",
+    "pays": "France",
+    "indice": "CAC 40",
+    "secteur": "Médias"
+  }
 }
