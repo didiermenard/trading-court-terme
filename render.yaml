@@ -1,0 +1,7 @@
+services:
+  - type: cron
+    name: trading-2h
+    env: python
+    buildCommand: ""
+    startCommand: "python scan_trading_court_terme.py"
+    schedule: "0 9-17/2 * * *"
