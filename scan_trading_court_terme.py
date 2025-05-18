@@ -16,7 +16,7 @@ EMAIL_MDP = os.getenv("EMAIL_MDP")
 EMAIL_DESTINATAIRE = os.getenv("EMAIL_DESTINATAIRE")
 
 # Chargement du fichier JSON enrichi
-with open("ticker_entreprise_mapping_enriched.json", "r", encoding="utf-8") as f:
+with open("ticker_entreprise_mapping.json", "r", encoding="utf-8") as f:
     mapping = json.load(f)
 
 # Liste des tickers
