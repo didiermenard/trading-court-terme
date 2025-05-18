@@ -1,7 +1,0 @@
-cron:
-  name: trading-2h
-  schedule: "0 9-17/2 * * *"
-  command: "python scan_trading_court_terme.py"
-  env: python
-  buildCommand: ""
-
