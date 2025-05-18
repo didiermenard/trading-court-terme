@@ -6,6 +6,7 @@ import pandas as pd
 from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
+from email.mime.text import MIMEText
 from email import encoders
 from dotenv import load_dotenv
 
@@ -68,30 +69,42 @@ for ticker in tickers:
     except Exception as e:
         print(f"Erreur avec {ticker}: {e}")
 
-# Envoi de l'email avec pièce jointe si opportunités
+# Préparation du fichier Excel à envoyer
+fichier_excel = "opportunites_detectees.xlsx"
 if opportunites:
     df_final = pd.DataFrame(opportunites)
-    fichier_excel = "opportunites_detectees.xlsx"
-    df_final.to_excel(fichier_excel, index=False)
-
-    msg = MIMEMultipart()
-    msg["From"] = EMAIL_EXPEDITEUR
-    msg["To"] = EMAIL_DESTINATAIRE
-    msg["Subject"] = "📈 Opportunités détectées - Analyse enrichie"
-
-    with open(fichier_excel, "rb") as f:
-        part = MIMEBase("application", "octet-stream")
-        part.set_payload(f.read())
-        encoders.encode_base64(part)
-        part.add_header("Content-Disposition", f"attachment; filename={fichier_excel}")
-        msg.attach(part)
-
-    try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-            server.login(EMAIL_EXPEDITEUR, EMAIL_MDP)
-            server.send_message(msg)
-        print("✅ Email envoyé avec fichier enrichi.")
-    except Exception as e:
-        print(f"❌ Erreur lors de l'envoi : {e}")
+    message = f"📈 Opportunités détectées : {len(opportunites)}\n\nVoir pièce jointe."
 else:
-    print("📭 Aucune opportunité détectée aujourd'hui.")
+    message = "📭 Aucune opportunité détectée aujourd’hui."
+    df_final = pd.DataFrame(columns=[
+        "Ticker", "Entreprise", "Pays", "Indice", "Secteur",
+        "Date", "Cours", "RSI", "MA5 > MA20", "Volume boosté",
+        "Stop Loss", "Objectif 1 (+5%)", "Objectif 2 (+8%)"
+    ])
+
+df_final.to_excel(fichier_excel, index=False)
+
+# Préparation de l’e-mail
+msg = MIMEMultipart()
+msg["From"] = EMAIL_EXPEDITEUR
+msg["To"] = EMAIL_DESTINATAIRE
+msg["Subject"] = "📢 Résultat analyse de trading court terme"
+
+msg.attach(MIMEText(message, "plain"))
+
+# Pièce jointe
+with open(fichier_excel, "rb") as f:
+    part = MIMEBase("application", "octet-stream")
+    part.set_payload(f.read())
+    encoders.encode_base64(part)
+    part.add_header("Content-Disposition", f"attachment; filename={fichier_excel}")
+    msg.attach(part)
+
+# Envoi de l’e-mail
+try:
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        server.login(EMAIL_EXPEDITEUR, EMAIL_MDP)
+        server.send_message(msg)
+    print("📬 Email envoyé avec succès.")
+except Exception as e:
+    print(f"❌ Erreur lors de l’envoi de l’email : {e}")
