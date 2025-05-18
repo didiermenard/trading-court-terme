@@ -86,5 +86,3 @@ if opportunites:
         print(f"❌ Erreur d'envoi : {e}")
 else:
     print("📭 Aucune opportunité détectée aujourd'hui.")
-
-
