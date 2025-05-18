@@ -1,88 +1,97 @@
 import os
+import json
 import smtplib
 import yfinance as yf
-import json
 import pandas as pd
-from email.mime.text import MIMEText
+from datetime import datetime
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
 from dotenv import load_dotenv
 
-# Charger les variables d’environnement
+# Chargement des variables d'environnement
 load_dotenv()
 EMAIL_EXPEDITEUR = os.getenv("EMAIL_EXPEDITEUR")
 EMAIL_MDP = os.getenv("EMAIL_MDP")
 EMAIL_DESTINATAIRE = os.getenv("EMAIL_DESTINATAIRE")
 
-# Charger le mapping depuis le fichier JSON
-with open("ticker_entreprise_mapping.json", "r", encoding="utf-8") as f:
-    mapping_ticker_nom = json.load(f)
+# Chargement du fichier JSON enrichi
+with open("ticker_entreprise_mapping_enriched.json", "r", encoding="utf-8") as f:
+    mapping = json.load(f)
 
-# Paramètres
-duree_moyenne = 20
-tickers = list(mapping_ticker_nom.keys())
-
-# Résultats
+# Liste des tickers
+tickers = list(mapping.keys())
 opportunites = []
 
 for ticker in tickers:
     try:
-        df = yf.download(ticker, period="3mo", interval="1d", progress=False)
+        df = yf.download(ticker, period="3mo", interval="1d", auto_adjust=True, progress=False)
 
-        if df.empty or len(df) < duree_moyenne:
+        if df.empty or len(df) < 20:
             continue
 
         df["MA5"] = df["Close"].rolling(window=5).mean()
         df["MA20"] = df["Close"].rolling(window=20).mean()
-        df["RSI"] = 100 - (100 / (1 + df["Close"].pct_change().add(1).rolling(14).apply(lambda x: (x[x > 0].mean() / abs(x[x < 0].mean())) if not x[x < 0].empty else 0)))
+        delta = df["Close"].diff()
+        gain = delta.where(delta > 0, 0.0)
+        loss = -delta.where(delta < 0, 0.0)
+        avg_gain = gain.rolling(window=14).mean()
+        avg_loss = loss.rolling(window=14).mean()
+        rs = avg_gain / avg_loss
+        df["RSI"] = 100 - (100 / (1 + rs))
+        df["Volume_moy_10j"] = df["Volume"].rolling(window=10).mean()
 
-        dernier = df.iloc[-1]
-        vol_moy = df["Volume"].rolling(window=20).mean().iloc[-1]
-        conditions = (
-            dernier["RSI"] < 30
-            and dernier["MA5"] > dernier["MA20"]
-            and dernier["Volume"] > vol_moy
-        )
+        dernier = df.dropna().iloc[-1]
+        rsi = float(dernier["RSI"])
+        ma5 = float(dernier["MA5"])
+        ma20 = float(dernier["MA20"])
+        volume = float(dernier["Volume"])
+        volume_moy = float(dernier["Volume_moy_10j"])
+        cours = float(dernier["Close"])
 
-        if conditions:
-            cours = round(dernier["Close"], 2)
-            stop_loss = round(cours * 0.97, 2)
-            objectif_1 = round(cours * 1.05, 2)
-            objectif_2 = round(cours * 1.08, 2)
-
+        if rsi < 30 and ma5 > ma20 and volume > volume_moy:
             opportunites.append({
                 "Ticker": ticker,
-                "Entreprise": mapping_ticker_nom[ticker],
-                "Date": df.index[-1].strftime("%Y-%m-%d"),
-                "Cours": cours,
-                "RSI": round(dernier["RSI"], 1),
+                "Entreprise": mapping[ticker]["entreprise"],
+                "Pays": mapping[ticker]["pays"],
+                "Indice": mapping[ticker]["indice"],
+                "Secteur": mapping[ticker]["secteur"],
+                "Date": datetime.today().strftime("%Y-%m-%d"),
+                "Cours": round(cours, 2),
+                "RSI": round(rsi, 1),
                 "MA5 > MA20": True,
                 "Volume boosté": True,
-                "Stop Loss": stop_loss,
-                "Objectif 1 (+5%)": objectif_1,
-                "Objectif 2 (+8%)": objectif_2
+                "Stop Loss": round(cours * 0.97, 2),
+                "Objectif 1 (+5%)": round(cours * 1.05, 2),
+                "Objectif 2 (+8%)": round(cours * 1.08, 2)
             })
     except Exception as e:
-        print(f"⚠️ Erreur sur {ticker} : {e}")
+        print(f"Erreur avec {ticker}: {e}")
 
-# Sauvegarde Excel
+# Envoi de l'email avec pièce jointe si opportunités
 if opportunites:
-    df_opps = pd.DataFrame(opportunites)
-    df_opps.to_excel("opportunites_detectees.xlsx", index=False)
+    df_final = pd.DataFrame(opportunites)
+    fichier_excel = "opportunites_detectees.xlsx"
+    df_final.to_excel(fichier_excel, index=False)
 
-    # Corps du message
-    texte = "\n".join(
-        [f"{o['Entreprise']} ({o['Ticker']}) — cours {o['Cours']} €" for o in opportunites]
-    )
-    msg = MIMEText("🚀 Opportunités détectées :\n\n" + texte)
-    msg["Subject"] = "📈 Opportunités de trading détectées"
+    msg = MIMEMultipart()
     msg["From"] = EMAIL_EXPEDITEUR
     msg["To"] = EMAIL_DESTINATAIRE
+    msg["Subject"] = "📈 Opportunités détectées - Analyse enrichie"
+
+    with open(fichier_excel, "rb") as f:
+        part = MIMEBase("application", "octet-stream")
+        part.set_payload(f.read())
+        encoders.encode_base64(part)
+        part.add_header("Content-Disposition", f"attachment; filename={fichier_excel}")
+        msg.attach(part)
 
     try:
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
             server.login(EMAIL_EXPEDITEUR, EMAIL_MDP)
             server.send_message(msg)
-        print("✅ Email envoyé avec succès.")
+        print("✅ Email envoyé avec fichier enrichi.")
     except Exception as e:
-        print(f"❌ Erreur d'envoi : {e}")
+        print(f"❌ Erreur lors de l'envoi : {e}")
 else:
     print("📭 Aucune opportunité détectée aujourd'hui.")
