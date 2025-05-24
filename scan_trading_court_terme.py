@@ -20,7 +20,6 @@ EMAIL_DESTINATAIRE = os.getenv("EMAIL_DESTINATAIRE")
 with open("ticker_entreprise_mapping.json", "r", encoding="utf-8") as f:
     mapping = json.load(f)
 
-# Liste des tickers
 tickers = list(mapping.keys())
 opportunites = []
 
@@ -50,7 +49,16 @@ for ticker in tickers:
         volume_moy = float(dernier["Volume_moy_10j"])
         cours = float(dernier["Close"])
 
-        if rsi < 30 and ma5 > ma20 and volume > volume_moy:
+        # Nouveau système de score flexible
+        score = 0
+        if rsi < 40:
+            score += 1
+        if ma5 > ma20:
+            score += 1
+        if volume > 0.8 * volume_moy:
+            score += 1
+
+        if score >= 2:
             opportunites.append({
                 "Ticker": ticker,
                 "Entreprise": mapping[ticker]["entreprise"],
@@ -60,8 +68,9 @@ for ticker in tickers:
                 "Date": datetime.today().strftime("%Y-%m-%d"),
                 "Cours": round(cours, 2),
                 "RSI": round(rsi, 1),
-                "MA5 > MA20": True,
-                "Volume boosté": True,
+                "MA5 > MA20": ma5 > ma20,
+                "Volume boosté": volume > volume_moy,
+                "Score total": score,
                 "Stop Loss": round(cours * 0.97, 2),
                 "Objectif 1 (+5%)": round(cours * 1.05, 2),
                 "Objectif 2 (+8%)": round(cours * 1.08, 2)
@@ -69,30 +78,28 @@ for ticker in tickers:
     except Exception as e:
         print(f"Erreur avec {ticker}: {e}")
 
-# Préparation du fichier Excel à envoyer
+# Création du fichier Excel même s’il est vide
 fichier_excel = "opportunites_detectees.xlsx"
 if opportunites:
     df_final = pd.DataFrame(opportunites)
-    message = f"📈 Opportunités détectées : {len(opportunites)}\n\nVoir pièce jointe."
+    message = f"📈 Opportunités détectées : {len(opportunites)}\n\nVoir fichier joint."
 else:
-    message = "📭 Aucune opportunité détectée aujourd’hui."
     df_final = pd.DataFrame(columns=[
         "Ticker", "Entreprise", "Pays", "Indice", "Secteur",
         "Date", "Cours", "RSI", "MA5 > MA20", "Volume boosté",
-        "Stop Loss", "Objectif 1 (+5%)", "Objectif 2 (+8%)"
+        "Score total", "Stop Loss", "Objectif 1 (+5%)", "Objectif 2 (+8%)"
     ])
+    message = "📭 Aucune opportunité détectée aujourd’hui. Voir fichier joint."
 
 df_final.to_excel(fichier_excel, index=False)
 
-# Préparation de l’e-mail
+# Envoi de l’e-mail
 msg = MIMEMultipart()
 msg["From"] = EMAIL_EXPEDITEUR
 msg["To"] = EMAIL_DESTINATAIRE
 msg["Subject"] = "📢 Résultat analyse de trading court terme"
-
 msg.attach(MIMEText(message, "plain"))
 
-# Pièce jointe
 with open(fichier_excel, "rb") as f:
     part = MIMEBase("application", "octet-stream")
     part.set_payload(f.read())
@@ -100,11 +107,10 @@ with open(fichier_excel, "rb") as f:
     part.add_header("Content-Disposition", f"attachment; filename={fichier_excel}")
     msg.attach(part)
 
-# Envoi de l’e-mail
 try:
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
         server.login(EMAIL_EXPEDITEUR, EMAIL_MDP)
         server.send_message(msg)
     print("📬 Email envoyé avec succès.")
 except Exception as e:
-    print(f"❌ Erreur lors de l’envoi de l’email : {e}")
+    print(f"❌ Erreur lors de l’envoi de l’e-mail : {e}")
