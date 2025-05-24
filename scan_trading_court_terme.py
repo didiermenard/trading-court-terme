@@ -1,4 +1,3 @@
-
 import os
 import json
 import smtplib
@@ -17,7 +16,7 @@ EMAIL_EXPEDITEUR = os.getenv("EMAIL_EXPEDITEUR")
 EMAIL_MDP = os.getenv("EMAIL_MDP")
 EMAIL_DESTINATAIRE = os.getenv("EMAIL_DESTINATAIRE")
 
-# Chargement du fichier JSON enrichi
+# Chargement du mapping enrichi
 with open("ticker_entreprise_mapping.json", "r", encoding="utf-8") as f:
     mapping = json.load(f)
 
@@ -27,7 +26,6 @@ opportunites = []
 for ticker in tickers:
     try:
         df = yf.download(ticker, period="3mo", interval="1d", auto_adjust=True, progress=False)
-
         if df.empty or len(df) < 20:
             continue
 
@@ -62,19 +60,12 @@ for ticker in tickers:
             score += 1
             score_pondere += 1.5
         if rsi < 30:
-            score_pondere += 1  # bonus
+            score_pondere += 1  # Bonus
 
-        gain_pot = cours * 0.05
-        perte = cours * 0.03
-        ratio_gr = round(gain_pot / perte, 2)
+        ratio_gr = round((cours * 0.05) / (cours * 0.03), 2)
 
         if score >= 2:
-            if rsi < 30:
-                avis = "RSI < 30 ✅"
-            elif rsi > 70:
-                avis = "RSI > 70 ⚠️"
-            else:
-                avis = "RSI neutre"
+            avis = "RSI < 30 ✅" if rsi < 30 else ("RSI > 70 ⚠️" if rsi > 70 else "RSI neutre")
             opportunites.append({
                 "Ticker": ticker,
                 "Entreprise": mapping[ticker]["entreprise"],
@@ -97,22 +88,22 @@ for ticker in tickers:
     except Exception as e:
         print(f"Erreur avec {ticker}: {e}")
 
-# Construction du fichier Excel avec deux onglets
-fichier_excel = "opportunites_detectees.xlsx"
+# Tableau explicatif
 guide_data = [
     ["Score total (sur 3)", "Nombre de critères simples remplis (RSI, MA5>MA20, volume)", "≥2 = signal retenu. Plus c’est haut, plus c’est fiable"],
-    ["Score pondéré (sur 4)", "Score ajusté : RSI<40 +1, MA5>MA20 +1.5, Volume>0.8×moy +1.5, RSI<30 bonus +1", "≥3 = priorité forte, 2–2.5 = à surveiller, <2 = éviter"],
+    ["Score pondéré (sur 4)", "RSI<40 +1, MA5>MA20 +1.5, Volume>0.8×moy +1.5, RSI<30 bonus +1", "≥3 = priorité forte, 2–2.5 = à surveiller, <2 = éviter"],
     ["RSI", "Indicateur de survente (<30) ou surachat (>70)", "<30 = rebond possible ✅ / >70 = prudence ⚠️"],
-    ["Ratio gain/risque", "Objectif 1 divisé par perte potentielle (objectif/stop-loss)", ">1.5 = excellent / <1 = mauvaise opportunité"],
-    ["MA5 > MA20", "Tendance haussière court/moyen terme", "True = bon momentum 🔼"],
-    ["Volume boosté", "Volume actuel supérieur à la moyenne des 10 derniers jours", "True = intérêt du marché 🧠"]
+    ["Ratio gain/risque", "Objectif 1 divisé par perte potentielle", ">1.5 = excellent / <1 = mauvaise opportunité"],
+    ["MA5 > MA20", "Tendance haussière", "True = bon momentum 🔼"],
+    ["Volume boosté", "Volume > moyenne 10 jours", "True = intérêt du marché 🧠"]
 ]
 df_guide = pd.DataFrame(guide_data, columns=["Colonne", "Signification", "Comment interpréter / Agir"])
 
+# Excel
+fichier_excel = "opportunites_detectees.xlsx"
 if opportunites:
     df_final = pd.DataFrame(opportunites)
     df_final.sort_values(by="Score pondéré", ascending=False, inplace=True)
-    message = f"📈 Opportunités détectées : {len(opportunites)}\n\nVoir fichier joint."
 else:
     df_final = pd.DataFrame(columns=[
         "Ticker", "Entreprise", "Pays", "Indice", "Secteur",
@@ -120,18 +111,18 @@ else:
         "Score total", "Score pondéré", "Ratio gain/risque", "Avis",
         "Stop Loss", "Objectif 1 (+5%)", "Objectif 2 (+8%)"
     ])
-    message = "📭 Aucune opportunité détectée aujourd’hui. Voir fichier joint."
 
 with pd.ExcelWriter(fichier_excel) as writer:
     df_final.to_excel(writer, sheet_name="Opportunites", index=False)
     df_guide.to_excel(writer, sheet_name="Guide_Priorisation", index=False)
 
-# Envoi du mail
+# Email
 msg = MIMEMultipart()
 msg["From"] = EMAIL_EXPEDITEUR
 msg["To"] = EMAIL_DESTINATAIRE
 msg["Subject"] = "📢 Résultat analyse de trading court terme"
-msg.attach(MIMEText(message, "plain"))
+texte = "📈 Opportunités détectées : voir fichier joint." if not df_final.empty else "📭 Aucune opportunité détectée aujourd’hui. Voir fichier joint."
+msg.attach(MIMEText(texte, "plain"))
 
 with open(fichier_excel, "rb") as f:
     part = MIMEBase("application", "octet-stream")
