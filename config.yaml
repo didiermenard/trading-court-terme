@@ -1,1 +1,33 @@
+ma_short: 5
+ma_long: 20
+rsi_period: 14
+rsi_oversold: 30
+rsi_neutral: 40
+rsi_overbought: 70
+volume_window: 10
+volume_boost: 0.8
 
+weights:
+  rsi_oversold: 1.5
+  rsi_neutral: 1
+  ma_crossover: 1.5
+  volume_boost: 1.5
+
+min_score: 2
+stop_loss_pct: 0.03
+target1_pct: 0.05
+target2_pct: 0.08
+
+data_period: '3mo'
+data_interval: '1d'
+min_data_points: 20
+
+mapping_file: 'ticker_entreprise_mapping.json'
+output_file: 'opportunites_detectees.xlsx'
+
+email_subject: '📢 Résultat analyse de trading court terme'
+email_body_detected: '📈 Opportunités détectées : voir fichier joint.'
+email_body_none: '📭 Aucune opportunité détectée aujourd’hui. Voir fichier joint.'
+
+smtp_server: 'smtp.gmail.com'
+smtp_port: 465
